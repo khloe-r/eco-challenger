@@ -7,7 +7,7 @@ export default class TeamCtrl {
       const teamOwner = req.body.owner;
       const teamName = req.body.name;
       const goals = ["recycling", "transportation", "electricity"];
-      const members = {};
+      const members = [];
 
       const date = new Date();
       const buff = new Buffer(date);

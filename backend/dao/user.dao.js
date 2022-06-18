@@ -14,14 +14,16 @@ export default class TeamDAO {
     }
   }
 
-  static async addUser(teams, email, pfp, total_points, goals) {
+  static async addUser(teams, name, email, pfp, total_points, goals, owns) {
     try {
       const userDoc = {
         teams: teams,
+        name: name,
         email: email,
         profile_photo: pfp,
         goals: goals,
         total_points: total_points,
+        owns: owns,
       };
       return await users.insertOne(userDoc);
     } catch (e) {
