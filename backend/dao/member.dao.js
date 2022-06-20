@@ -11,7 +11,7 @@ export default class MemberDAO {
       users = await conn.db(process.env.ECOCHALLENGE_NS).collection("users");
       teams = await conn.db(process.env.ECOCHALLENGE_NS).collection("teams");
     } catch (e) {
-      console.error(`Unable to establish a collection handle in userDAO: ${e}`);
+      console.error(`Unable to establish a collection handle in memberDAO: ${e}`);
     }
   }
 
