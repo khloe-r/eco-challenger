@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Imprima&family=Itim&display=swap');
+
+.App {
+  text-align: center;
+  background-color: #E7F6FE;
+  min-height: 100vh;
+}
+
+h1 {
+  font-family: 'Itim';
+  text-transform: uppercase;
+  font-size: 90px;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
