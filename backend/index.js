@@ -6,7 +6,7 @@ import UserDAO from "./dao/user.dao.js";
 import MemberDAO from "./dao/member.dao.js";
 import GoalDAO from "./dao/goals.dao.js";
 dotenv.config();
-const MongoClient = mongodb.MongoClient;
+let MongoClient = mongodb.MongoClient;
 
 const port = process.env.PORT || 8000;
 
@@ -28,3 +28,5 @@ MongoClient.connect(process.env.ECOCHALLENGE_DB_URI, {
       console.log(`listening on port ${port}`);
     });
   });
+
+export default MongoClient.connection;

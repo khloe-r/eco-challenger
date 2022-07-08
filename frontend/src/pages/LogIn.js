@@ -1,11 +1,14 @@
 import { Header, Button, Input } from "../components";
-import { Stack } from "@chakra-ui/react";
-import EcoChallengeDataService from "../services/EcoChallengeService";
+import { Alert, AlertIcon, AlertTitle, AlertDescription, Stack } from "@chakra-ui/react";
 import { useState } from "react";
+import EcoChallengeDataService from "../services/EcoChallengeService";
+import { useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const LogIn = ({ setUser, user }) => {
+  let navigate = useNavigate();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   const onChangeName = (e) => {
     const name = e.target.value;
@@ -16,25 +19,34 @@ const SignUp = () => {
     setPassword(name);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     var data = { username: name, password: password };
-    await EcoChallengeDataService.handleSignUp(data)
+    EcoChallengeDataService.handleLogin(data)
       .then((response) => {
         console.log(response.data);
-        if (response.data) {
-          console.log("good");
-        } else {
-          console.log("bad");
+        if (response.status === 200) {
+          console.log(response);
+          setUser({ loggedIn: "true", username: response.data.username });
+          navigate("/dashboard");
         }
       })
       .catch((e) => {
         console.log(e);
+        setError(true);
       });
   };
+
   return (
     <>
-      <Header>Sign Up</Header>
+      <Header>Log In</Header>
       <Stack direction="column" spacing={4} align="center" justifyContent={"center"}>
+        {error && (
+          <Alert status="error" w="xs">
+            <AlertIcon />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>Invalid Username or Password.</AlertDescription>
+          </Alert>
+        )}
         <Input label="username" onChange={onChangeName} />
         <Input label="password" onChange={onChangePassword} />
         <Button variant="invert" onclick={handleSubmit}>
@@ -45,4 +57,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default LogIn;

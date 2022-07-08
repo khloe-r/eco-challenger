@@ -2,7 +2,7 @@ import { Stack } from "@chakra-ui/react";
 import { Header, Button } from "../components";
 import { useNavigate } from "react-router-dom";
 
-const Welcome = () => {
+const Welcome = ({ user }) => {
   let navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ const Welcome = () => {
       </Header>
       <Stack direction="row" spacing={4} align="center" justifyContent={"center"}>
         <Button onclick={() => navigate("/sign-up")}>Sign Up</Button>
-        <Button>Log In</Button>
+        <Button onclick={() => navigate("/log-in")}>Log In</Button>
       </Stack>
     </>
   );

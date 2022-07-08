@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import { SimpleGrid } from "@chakra-ui/react";
 
-const Team = () => {
+const Team = ({ user }) => {
   let { team_id } = useParams();
   const [team, setTeam] = useState();
+  console.log(user);
 
   const getTeam = () => {
     EcoChallengeDataService.getTeam(team_id)

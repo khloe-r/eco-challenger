@@ -1,5 +1,6 @@
 let users;
 import mongodb from "mongodb";
+import bcrypt from "bcryptjs";
 const ObjectId = mongodb.ObjectId;
 
 export default class TeamDAO {
@@ -14,11 +15,19 @@ export default class TeamDAO {
     }
   }
 
-  static async addUser(teams, name, email, pfp, total_points, goals, owns) {
+  static async verifyPassword(user, password) {
+    if (password === user.password) {
+      return true;
+    }
+    return false;
+  }
+
+  static async addUser(teams, username, password, email, pfp, total_points, goals, owns) {
     try {
       const userDoc = {
         teams: teams,
-        name: name,
+        name: username,
+        password: password,
         email: email,
         profile_photo: pfp,
         goals: goals,
@@ -50,6 +59,15 @@ export default class TeamDAO {
     }
   }
 
+  static async getUserByUsername(username) {
+    try {
+      const getResponse = await users.find({ name: { $eq: username } }).next();
+      return getResponse;
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
   static async deleteUser(userID) {
     try {
       const deleteResponse = await users.deleteOne({ _id: { $eq: ObjectId(userID) } });
@@ -57,5 +75,9 @@ export default class TeamDAO {
     } catch (e) {
       return { error: e };
     }
+  }
+
+  static async checkPassword(inputPassword, originalPassword) {
+    return bcrypt.compareSync(inputPassword, originalPassword);
   }
 }
