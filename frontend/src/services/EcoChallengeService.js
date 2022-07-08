@@ -16,6 +16,14 @@ class EcoChallengeDataService {
   getUser() {
     return http.get("/get-user");
   }
+
+  getUserJoin(data) {
+    return http.get("/users/join", data);
+  }
+
+  editUser(data) {
+    return http.put("/users", data);
+  }
 }
 
 export default new EcoChallengeDataService();

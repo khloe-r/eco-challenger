@@ -1,5 +1,7 @@
 import UserDAO from "../dao/user.dao.js";
+import mongodb from "mongodb";
 import bcrypt from "bcryptjs";
+const ObjectId = mongodb.ObjectId;
 
 export default class UserCtrl {
   static async apiAddUser(req, res, next) {
@@ -7,15 +9,14 @@ export default class UserCtrl {
       const teams = [];
       const username = req.body.username;
       const password = bcrypt.hashSync(req.body.password);
-      const email = req.body.email;
-      const pfp = `https://emojiapi.dev/api/v1/${req.body.emoji_name}.svg`;
+      const pfp = "";
       const total_points = 0;
       const goals = [];
       const owns = [];
 
       req.session.username = username;
 
-      const UserReponse = await UserDAO.addUser(teams, username, password, email, pfp, total_points, goals, owns);
+      const UserReponse = await UserDAO.addUser(teams, username, password, pfp, total_points, goals, owns);
       res.json({ status: "success" });
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
@@ -26,9 +27,9 @@ export default class UserCtrl {
   static async apiEditUser(req, res, next) {
     try {
       const userID = req.body.user_id;
-      const email = req.body.email;
+      const pfp = req.body.pfp;
 
-      const EditResponse = await UserDAO.editUser(userID, email);
+      const EditResponse = await UserDAO.editUser(userID, pfp);
       res.json({ status: "success" });
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
@@ -54,6 +55,16 @@ export default class UserCtrl {
 
       const getTeam = await UserDAO.deleteUser(userID);
       res.json({ status: "success" });
+    } catch (e) {
+      console.log(`error in UserCtrl: ${e}`);
+      res.status(500).json({ error: e });
+    }
+  }
+
+  static async getCreationDate(req, res, next) {
+    try {
+      console.log(req.body.user_id);
+      res.json({ timestamp: ObjectId(req.body.user_id).getTimestamp() });
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });

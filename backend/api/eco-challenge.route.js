@@ -13,5 +13,6 @@ router.route("/join-team").patch(MemberCtrl.apiAddMember);
 router.route("/leave-team").patch(MemberCtrl.apiRemoveMember);
 router.route("/goals").post(GoalCtrl.apiAddGoalset).patch(GoalCtrl.apiEditGoalset);
 router.route("/signup").post(UserCtrl.apiAddUser);
+router.route("/users/join").get(UserCtrl.getCreationDate);
 
 export default router;

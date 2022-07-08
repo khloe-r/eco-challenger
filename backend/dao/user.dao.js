@@ -22,13 +22,12 @@ export default class TeamDAO {
     return false;
   }
 
-  static async addUser(teams, username, password, email, pfp, total_points, goals, owns) {
+  static async addUser(teams, username, password, pfp, total_points, goals, owns) {
     try {
       const userDoc = {
         teams: teams,
         name: username,
         password: password,
-        email: email,
         profile_photo: pfp,
         goals: goals,
         total_points: total_points,
@@ -41,9 +40,9 @@ export default class TeamDAO {
     }
   }
 
-  static async editUser(userID, email) {
+  static async editUser(userID, pfp) {
     try {
-      const updateResponse = await users.updateOne({ _id: ObjectId(userID) }, { $set: { email: email } });
+      const updateResponse = await users.updateOne({ _id: ObjectId(userID) }, { $set: { profile_photo: pfp } });
       return updateResponse;
     } catch (e) {
       return { error: e };
