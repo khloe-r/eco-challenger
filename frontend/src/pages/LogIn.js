@@ -26,7 +26,7 @@ const LogIn = ({ setUser, user }) => {
         console.log(response.data);
         if (response.status === 200) {
           console.log(response);
-          setUser({ loggedIn: "true", username: response.data.username });
+          setUser({ loggedIn: true, username: response.data.username });
           navigate("/dashboard");
         }
       })

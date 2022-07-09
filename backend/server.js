@@ -126,6 +126,19 @@ ecochallenge.route("/get-user").get((req, res, next) => {
   }
 });
 
+ecochallenge.route("/logout").post((req, res) => {
+  if (req.user) {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.json({ msg: "logging out" });
+    });
+  } else {
+    res.json({ msg: "no user to log out" });
+  }
+});
+
 app.use("/api/eco-challenge", ecochallenge);
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 

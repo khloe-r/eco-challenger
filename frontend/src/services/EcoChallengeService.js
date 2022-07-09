@@ -13,6 +13,10 @@ class EcoChallengeDataService {
     return http.post("/signup", data);
   }
 
+  handleLogout() {
+    return http.post("/logout");
+  }
+
   getUser() {
     return http.get("/get-user");
   }

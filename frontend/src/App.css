@@ -3,8 +3,12 @@
 
 .App {
   text-align: center;
-  background-color: #E7F6FE;
+  background: #DEEDD2 url('images/Background.png') repeat-x;
   min-height: 100vh;
+}
+
+#root {
+  background-color: #DEEDD2;
 }
 
 h1 {

@@ -6,13 +6,15 @@ import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
 import Team from "./pages/Team";
+import Navbar from "./pages/Navbar";
 
 import { Routes, Route } from "react-router-dom";
 
 function App() {
-  const [user, setUser] = useState({ loggedIn: "false", username: "" });
+  const [user, setUser] = useState({ loggedIn: false, username: "" });
   return (
     <div className="App">
+      <Navbar setUser={setUser} user={user} />
       <Routes>
         <Route path="/" element={<Welcome user={user} />} />
         <Route path="/welcome" element={<Welcome user={user} />} />

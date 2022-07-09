@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import Intro from "./Intro";
-import { SimpleGrid, Image, Flex } from "@chakra-ui/react";
+import { SimpleGrid, Image, Flex, Box } from "@chakra-ui/react";
 
 const Dashboard = ({ user, setUser }) => {
   let navigate = useNavigate();
@@ -21,7 +21,7 @@ const Dashboard = ({ user, setUser }) => {
     await EcoChallengeDataService.getUser()
       .then(async (response) => {
         if (response.status === 200) {
-          setUser({ loggedIn: "true", username: response.data.user.name });
+          setUser({ loggedIn: true, username: response.data.user.name });
           setUserInfo(response.data.user);
           await EcoChallengeDataService.getUserJoin({ user_id: response.data.user._id })
             .then((res) => {
@@ -32,13 +32,13 @@ const Dashboard = ({ user, setUser }) => {
               console.log(e);
             });
         } else {
-          setUser({ loggedIn: "false", username: "" });
+          setUser({ loggedIn: false, username: "" });
           navigate("/log-in");
         }
       })
       .catch((e) => {
         console.log(e);
-        setUser({ loggedIn: "false", username: "" });
+        setUser({ loggedIn: false, username: "" });
         navigate("/log-in");
       });
   }, [user]);
@@ -69,11 +69,36 @@ const Dashboard = ({ user, setUser }) => {
           </Flex>
           <Text size="large">{user.username}</Text>
           <Text size={"small"}>Joined since {joinDate.slice(0, 10)}</Text>
+          <SimpleGrid columns={2} spacing={10}>
+            <Box>
+              <Text size="small">Ranked</Text>
+              <Text size="large">#</Text>
+              <Text size="small">Worldwide</Text>
+            </Box>
+            <Box>
+              <Text size="small">Total Points</Text>
+              <Text size="large">{userInfo.total_points}</Text>
+            </Box>
+          </SimpleGrid>
         </Card>
         <Card>
           <Text size="large">Today's Goals</Text>
+          {userInfo?.teams?.length === 0 && (
+            <Text size="small" px={"2"}>
+              Join or create a team to see your goals!
+            </Text>
+          )}
         </Card>
       </SimpleGrid>
+      <Box mt={20} pb={20}>
+        <Header>My Standings</Header>
+        {userInfo?.teams?.length === 0 && (
+          <Text size="small" px={"2"}>
+            Join or create a team to see your standings!
+          </Text>
+        )}
+      </Box>
+      {userInfo?.owns?.length > 0 && <Header>My Teams &gt;&gt;</Header>}
     </>
   );
 };
