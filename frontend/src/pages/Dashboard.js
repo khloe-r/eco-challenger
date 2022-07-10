@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import Intro from "./Intro";
-import { SimpleGrid, Image, Flex, Box } from "@chakra-ui/react";
+import { SimpleGrid, Image, Flex, Box, Badge, Text as CText, Divider, Icon } from "@chakra-ui/react";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const Dashboard = ({ user, setUser }) => {
   let navigate = useNavigate();
@@ -83,25 +84,56 @@ const Dashboard = ({ user, setUser }) => {
           )}
         </Card>
       </SimpleGrid>
-      <Box mt={20} pb={20}>
+      <Box mt={20} pb={10}>
         <Header>My Standings</Header>
         {userInfo.teams?.length === 0 && (
           <Text size="small" px={"2"}>
             Join or create a team to see your standings!
           </Text>
         )}
-        {userInfo.team_info?.map((team) => {
+        {userInfo.team_info?.map((team, index) => {
           return (
-            <Text>
-              {team.team_name} - Rank: {team?.scores[0]?.rank}
-            </Text>
+            <>
+              <Flex p={5} w="full" alignItems="center" justifyContent="center" onClick={() => navigate(`/teams/${team.team_code}`)} cursor="pointer" fontFamily={"Imprima"} color="brand.300">
+                <Box bg={"brand.100"} w="lg" rounded="lg" shadow="lg" position="relative">
+                  <Flex p="6" justify={"space-between"}>
+                    <Flex direction="column" align={"flex-start"}>
+                      <Box d="flex" alignItems="baseline">
+                        <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="brand" variant="solid">
+                          Rank #{team?.scores[0]?.rank}
+                        </Badge>
+                      </Box>
+                      <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+                        {team.team_name}
+                      </Box>
+                    </Flex>
+                    <Flex mt="1" justifyContent="space-between" alignContent="center">
+                      <ArrowRightIcon h={7} w={7} alignSelf={"center"} />
+                    </Flex>
+                  </Flex>
+                </Box>
+              </Flex>
+            </>
           );
         })}
       </Box>
       <Box pb={20}>
         {userInfo.owns?.length > 0 && <Header>My Teams</Header>}
         {userInfo.owns?.map((team) => {
-          return <Text>{team.team_name}</Text>;
+          return (
+            <Flex p={5} w="full" alignItems="center" justifyContent="center" onClick={() => navigate(`/teams/${team.team_code}`)} cursor="pointer" fontFamily={"Imprima"} color="brand.100">
+              <Box bg={"brand.200"} w="lg" rounded="lg" shadow="lg" position="relative">
+                <Flex p="6" justify={"space-between"}>
+                  <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+                    {team.team_name}
+                  </Box>
+                  <Flex mt="1" justifyContent="space-between" alignContent="center">
+                    <ArrowRightIcon h={7} w={7} alignSelf={"center"} />
+                  </Flex>
+                </Flex>
+              </Box>
+            </Flex>
+          );
         })}
       </Box>
     </>
