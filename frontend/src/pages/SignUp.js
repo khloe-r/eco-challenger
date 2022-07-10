@@ -1,9 +1,11 @@
 import { Header, Button, Input } from "../components";
 import { Stack } from "@chakra-ui/react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const SignUp = ({ user, setUser }) => {
+  let navigate = useNavigate();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,6 +25,8 @@ const SignUp = () => {
         console.log(response.data);
         if (response.data) {
           console.log("good");
+          setUser({ loggedIn: true, username: response.data.username, id: response.data._id });
+          navigate("/dashboard");
         } else {
           console.log("bad");
         }
@@ -31,6 +35,13 @@ const SignUp = () => {
         console.log(e);
       });
   };
+
+  useEffect(() => {
+    if (user.loggedIn) {
+      navigate("/dashboard");
+    }
+  }, []);
+
   return (
     <>
       <Header>Sign Up</Header>

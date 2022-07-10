@@ -37,12 +37,11 @@ export default class UserCtrl {
     }
   }
 
-  static async apiGetUserById(req, res, next) {
+  static async apiGetUserById(user_id, points) {
     try {
-      const userID = req.body.user_id;
-
-      const getTeam = await UserDAO.getUserById(userID);
-      res.json(getTeam);
+      console.log(points);
+      const getTeam = await UserDAO.getFullUserInfo(user_id, points);
+      return getTeam;
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });
@@ -54,6 +53,7 @@ export default class UserCtrl {
       const userID = req.body.user_id;
 
       const getTeam = await UserDAO.deleteUser(userID);
+
       res.json({ status: "success" });
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
@@ -61,10 +61,11 @@ export default class UserCtrl {
     }
   }
 
-  static async getCreationDate(req, res, next) {
+  static async apiGetRank(req, res, next) {
     try {
-      console.log(req.body.user_id);
-      res.json({ timestamp: ObjectId(req.body.user_id).getTimestamp() });
+      const points = parseInt(req.params.score);
+      const rank = await UserDAO.getRank(points);
+      res.json(rank);
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });

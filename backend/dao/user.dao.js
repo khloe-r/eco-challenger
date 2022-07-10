@@ -67,6 +67,113 @@ export default class TeamDAO {
     }
   }
 
+  static async getFullUserInfo(userID, points) {
+    try {
+      const pipeline = [
+        {
+          $match: {
+            _id: ObjectId(userID),
+          },
+        },
+        {
+          $addFields: {
+            timestamp: {
+              $toDate: ObjectId(userID),
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "teams",
+            let: {
+              user: "$_id",
+            },
+            pipeline: [
+              {
+                $unwind: "$members",
+              },
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$members", "$$user"],
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  let: {
+                    team_id: "$team_code",
+                  },
+                  pipeline: [
+                    {
+                      $unwind: "$teams",
+                    },
+                    {
+                      $match: {
+                        $expr: {
+                          $and: [
+                            {
+                              $eq: ["$teams.team_id", "$$team_id"],
+                            },
+                          ],
+                        },
+                      },
+                    },
+                    {
+                      $match: {
+                        total_points: {
+                          $gte: points,
+                        },
+                      },
+                    },
+                    {
+                      $count: "rank",
+                    },
+                  ],
+                  as: "scores",
+                },
+              },
+            ],
+            as: "team_info",
+          },
+        },
+        {
+          $lookup: {
+            from: "teams",
+            localField: "_id",
+            foreignField: "owner",
+            as: "owns",
+          },
+        },
+      ];
+      return await users.aggregate(pipeline).next();
+    } catch (e) {
+      console.log(`error in UserCtrl: ${e}`);
+      return { error: e };
+    }
+  }
+
+  static async getRank(points) {
+    try {
+      const pipeline = [
+        {
+          $match: {
+            total_points: {
+              $gte: points,
+            },
+          },
+        },
+        {
+          $count: "rank",
+        },
+      ];
+      return await users.aggregate(pipeline).next();
+    } catch (e) {
+      console.log(`error in UserCtrl: ${e}`);
+    }
+  }
+
   static async deleteUser(userID) {
     try {
       const deleteResponse = await users.deleteOne({ _id: { $eq: ObjectId(userID) } });

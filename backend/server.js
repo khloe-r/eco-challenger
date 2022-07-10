@@ -7,6 +7,7 @@ import LocalStrategy from "passport-local";
 import bcrypt from "bcryptjs";
 import passport from "passport";
 import UserDAO from "./dao/user.dao.js";
+import UserCtrl from "./api/user.controller.js";
 
 dotenv.config();
 
@@ -111,16 +112,22 @@ ecochallenge.route("/login").post(
   (req, res) => {
     var userInfo = {
       username: req.user.name,
+      id: req.user._id,
     };
     console.log("logged in", req.user);
     res.send(userInfo);
   }
 );
 
-ecochallenge.route("/get-user").get((req, res, next) => {
+ecochallenge.route("/get-user").get(async (req, res, next) => {
   console.log(req.user);
   if (req.user) {
-    res.json({ user: req.user });
+    await UserCtrl.apiGetUserById(req.user._id, req.user.total_points).then((response) => {
+      const info = JSON.stringify(response);
+      const json = JSON.parse(info);
+      console.log(json);
+      res.json({ user: json });
+    });
   } else {
     res.json({ user: null });
   }

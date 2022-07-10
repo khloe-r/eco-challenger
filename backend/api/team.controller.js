@@ -1,12 +1,13 @@
 import TeamDAO from "../dao/team.dao.js";
 import dayjs from "dayjs";
+import { ObjectId } from "mongodb";
 
 export default class TeamCtrl {
   static async apiAddTeam(req, res, next) {
     try {
-      const teamOwner = req.body.owner;
+      const teamOwner = ObjectId(req.body.owner);
       const teamName = req.body.name;
-      const goals = ["recycling", "transportation", "electricity"];
+      const goals = [];
       const members = [];
 
       const date = new Date();

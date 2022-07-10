@@ -1,10 +1,7 @@
 import http from "../http";
 
 class EcoChallengeDataService {
-  getTeam(id) {
-    return http.get(`/team/${id}`);
-  }
-
+  // Authentication
   handleLogin(data) {
     return http.post("/login", data);
   }
@@ -17,16 +14,30 @@ class EcoChallengeDataService {
     return http.post("/logout");
   }
 
+  // Users
   getUser() {
     return http.get("/get-user");
   }
 
-  getUserJoin(data) {
-    return http.get("/users/join", data);
+  getRank(score) {
+    return http.get(`/users/${score}`);
   }
 
   editUser(data) {
     return http.put("/users", data);
+  }
+
+  // Teams
+  getTeam(id) {
+    return http.get(`/team/${id}`);
+  }
+
+  addMember(data) {
+    return http.patch("/join-team", data);
+  }
+
+  addTeam(data) {
+    return http.post("/teams", data);
   }
 }
 

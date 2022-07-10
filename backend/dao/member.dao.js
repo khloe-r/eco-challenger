@@ -17,8 +17,8 @@ export default class MemberDAO {
 
   static async addMember(teamID, userID) {
     try {
-      await teams.updateOne({ _id: ObjectId(teamID) }, { $push: { members: { user_id: userID, score: 0 } } });
-      return await users.updateOne({ _id: ObjectId(userID) }, { $push: { teams: { team_id: teamID, score: 0 } } });
+      await teams.updateOne({ team_code: { $eq: teamID } }, { $push: { members: ObjectId(userID) } });
+      return await users.updateOne({ _id: { $eq: ObjectId(userID) } }, { $push: { teams: { team_id: teamID, score: 0 } } });
     } catch (e) {
       console.error(`Unable to add user: ${e}`);
       return { error: e };

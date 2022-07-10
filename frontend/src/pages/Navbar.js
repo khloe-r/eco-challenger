@@ -10,11 +10,9 @@ const Navbar = ({ user, setUser }) => {
     console.log("logging out");
     await EcoChallengeDataService.handleLogout()
       .then((response) => {
-        setUser({ loggedIn: false, username: "" });
+        setUser({ loggedIn: false, username: "", id: "" });
         console.log(user);
-        if (response.data.msg === "logging out") {
-          navigate("/log-in");
-        }
+        navigate("/log-in");
       })
       .catch((e) => {
         console.log(e);
@@ -27,8 +25,8 @@ const Navbar = ({ user, setUser }) => {
         <Stack direction="row" spacing={4} align={"center"} justifyContent={"space-between"}>
           <Stack direction="row" spacing={4} align={"center"} justifyContent={"flex-start"}>
             <Button onclick={() => navigate("/dashboard")}>Dashboard</Button>
-            <Button onclick={() => navigate("/sign-up")}>Join a Team</Button>
-            <Button onclick={() => navigate("/log-in")}>Create a Team</Button>
+            <Button onclick={() => navigate("/join-team")}>Join a Team</Button>
+            <Button onclick={() => navigate("/create-team")}>Create a Team</Button>
           </Stack>
           <Button onclick={handleLogout}>Log Out</Button>
         </Stack>

@@ -7,41 +7,36 @@ import { SimpleGrid, Image, Flex, Box } from "@chakra-ui/react";
 
 const Dashboard = ({ user, setUser }) => {
   let navigate = useNavigate();
-  const [name, setName] = useState("");
   const [userInfo, setUserInfo] = useState({});
-  const [joinDate, setJoinDate] = useState("");
+  const [rank, setRank] = useState("");
   const [pfp, setPfp] = useState(0);
-
-  const onChangeName = (e) => {
-    const name = e.target.value;
-    setName(name);
-  };
 
   const getUser = useCallback(async () => {
     await EcoChallengeDataService.getUser()
       .then(async (response) => {
         if (response.status === 200) {
-          setUser({ loggedIn: true, username: response.data.user.name });
+          setUser({ loggedIn: true, username: response.data.user.name, id: response.data.user._id });
           setUserInfo(response.data.user);
-          await EcoChallengeDataService.getUserJoin({ user_id: response.data.user._id })
-            .then((res) => {
-              console.log(res);
-              setJoinDate(res.data.timestamp);
+          const score = response.data.user.total_points;
+          await EcoChallengeDataService.getRank(score)
+            .then((response) => {
+              console.log(response);
+              setRank(response.data.rank);
             })
             .catch((e) => {
               console.log(e);
             });
         } else {
-          setUser({ loggedIn: false, username: "" });
+          setUser({ loggedIn: false, username: "", id: "" });
           navigate("/log-in");
         }
       })
       .catch((e) => {
         console.log(e);
-        setUser({ loggedIn: false, username: "" });
+        setUser({ loggedIn: false, username: "", id: "" });
         navigate("/log-in");
       });
-  }, [user]);
+  }, [user, userInfo]);
 
   useEffect(() => {
     getUser();
@@ -55,8 +50,6 @@ const Dashboard = ({ user, setUser }) => {
     return <Intro info={userInfo} setPfp={setPfp} pfp={pfp} />;
   }
 
-  console.log(userInfo);
-
   return (
     <>
       <Header>{user.username}'s Dashboard!</Header>
@@ -68,11 +61,11 @@ const Dashboard = ({ user, setUser }) => {
             </Flex>
           </Flex>
           <Text size="large">{user.username}</Text>
-          <Text size={"small"}>Joined since {joinDate.slice(0, 10)}</Text>
+          <Text size={"small"}>Joined since {userInfo.timestamp?.slice(0, 10)}</Text>
           <SimpleGrid columns={2} spacing={10}>
             <Box>
               <Text size="small">Ranked</Text>
-              <Text size="large">#</Text>
+              <Text size="large">#{rank}</Text>
               <Text size="small">Worldwide</Text>
             </Box>
             <Box>
@@ -83,7 +76,7 @@ const Dashboard = ({ user, setUser }) => {
         </Card>
         <Card>
           <Text size="large">Today's Goals</Text>
-          {userInfo?.teams?.length === 0 && (
+          {userInfo.teams?.length === 0 && (
             <Text size="small" px={"2"}>
               Join or create a team to see your goals!
             </Text>
@@ -92,13 +85,25 @@ const Dashboard = ({ user, setUser }) => {
       </SimpleGrid>
       <Box mt={20} pb={20}>
         <Header>My Standings</Header>
-        {userInfo?.teams?.length === 0 && (
+        {userInfo.teams?.length === 0 && (
           <Text size="small" px={"2"}>
             Join or create a team to see your standings!
           </Text>
         )}
+        {userInfo.team_info?.map((team) => {
+          return (
+            <Text>
+              {team.team_name} - Rank: {team?.scores[0]?.rank}
+            </Text>
+          );
+        })}
       </Box>
-      {userInfo?.owns?.length > 0 && <Header>My Teams &gt;&gt;</Header>}
+      <Box pb={20}>
+        {userInfo.owns?.length > 0 && <Header>My Teams</Header>}
+        {userInfo.owns?.map((team) => {
+          return <Text>{team.team_name}</Text>;
+        })}
+      </Box>
     </>
   );
 };

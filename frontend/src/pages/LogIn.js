@@ -1,6 +1,6 @@
 import { Header, Button, Input } from "../components";
 import { Alert, AlertIcon, AlertTitle, AlertDescription, Stack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const LogIn = ({ setUser, user }) => {
         console.log(response.data);
         if (response.status === 200) {
           console.log(response);
-          setUser({ loggedIn: true, username: response.data.username });
+          setUser({ loggedIn: true, username: response.data.username, id: response.data._id });
           navigate("/dashboard");
         }
       })
@@ -35,6 +35,12 @@ const LogIn = ({ setUser, user }) => {
         setError(true);
       });
   };
+
+  useEffect(() => {
+    if (user.loggedIn) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   return (
     <>
