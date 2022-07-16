@@ -1,10 +1,12 @@
 import { Stack, Box } from "@chakra-ui/react";
 import { Button } from "../components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 
 const Navbar = ({ user, setUser }) => {
   let navigate = useNavigate();
+  let location = useLocation();
+  console.log(location);
 
   const handleLogout = async () => {
     console.log("logging out");
@@ -32,10 +34,13 @@ const Navbar = ({ user, setUser }) => {
         </Stack>
       )}
 
-      {!user.loggedIn && (
-        <Stack direction="row" spacing={4} align={"center"} justifyContent={"flex-end"}>
-          <Button onclick={() => navigate("/log-in")}>Log In</Button>
-          <Button onclick={() => navigate("/sign-up")}>Sign Up</Button>
+      {!user.loggedIn && location.pathname !== "/" && (
+        <Stack direction="row" spacing={4} align={"center"} justifyContent={"space-between"}>
+          <Button onclick={() => navigate("/")}>Back to Welcome Page</Button>
+          <Stack direction="row" spacing={4} align={"center"} justifyContent={"flex-end"}>
+            <Button onclick={() => navigate("/log-in")}>Log In</Button>
+            <Button onclick={() => navigate("/sign-up")}>Sign Up</Button>
+          </Stack>
         </Stack>
       )}
     </Box>
