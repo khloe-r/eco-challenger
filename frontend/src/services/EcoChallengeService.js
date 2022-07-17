@@ -28,8 +28,8 @@ class EcoChallengeDataService {
   }
 
   // Teams
-  getTeam(id) {
-    return http.get(`/team/${id}`);
+  getTeam(id, user_id) {
+    return http.get(`/team/${id}/${user_id}`);
   }
 
   addMember(data) {

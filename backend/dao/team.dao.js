@@ -39,10 +39,72 @@ export default class TeamDAO {
     }
   }
 
-  static async getTeamByCode(teamCode) {
+  static async getTeamByCode(teamCode, userId) {
     try {
-      const getResponse = await teams.find({ team_code: { $eq: teamCode } }).next();
-      return getResponse;
+      const pipeline = [
+        {
+          $lookup: {
+            from: "users",
+            localField: "members",
+            foreignField: "_id",
+            as: "members",
+          },
+        },
+        {
+          $match: {
+            team_code: teamCode,
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            let: {
+              team_id: "$team_code",
+            },
+            pipeline: [
+              {
+                $unwind: "$teams",
+              },
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$teams.team_id", "$$team_id"],
+                      },
+                    ],
+                  },
+                },
+              },
+              {
+                $set: {
+                  score: "$teams.score",
+                },
+              },
+              {
+                $sort: {
+                  score: -1,
+                },
+              },
+              {
+                $set: {
+                  password: "XXXX",
+                },
+              },
+            ],
+            as: "members",
+          },
+        },
+        {
+          $set: {
+            owner: {
+              $eq: ["$owner", new ObjectId(userId)],
+            },
+          },
+        },
+      ];
+
+      return await teams.aggregate(pipeline).next();
     } catch (e) {
       return { error: e };
     }

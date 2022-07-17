@@ -43,8 +43,9 @@ export default class TeamCtrl {
   static async apiGetTeamById(req, res, next) {
     try {
       const teamCode = req.params.team_code || {};
+      const userId = req.params.user || {};
 
-      const getTeam = await TeamDAO.getTeamByCode(teamCode);
+      const getTeam = await TeamDAO.getTeamByCode(teamCode, userId);
       res.json(getTeam);
     } catch (e) {
       console.log(`error in TeamCtrl: ${e}`);

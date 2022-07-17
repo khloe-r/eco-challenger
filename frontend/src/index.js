@@ -16,7 +16,8 @@ const theme = extendTheme({
       300: "#DEEDD2",
       700: "#DEEDD2",
       500: "#B0D195",
-      600: "blue",
+      600: "#86A46E",
+      800: "#86A46E",
     },
   },
 });

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import Intro from "./Intro";
-import { SimpleGrid, Image, Flex, Box, Badge, Text as CText, Divider, Icon } from "@chakra-ui/react";
+import { SimpleGrid, Image, Flex, Box, Badge } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const Dashboard = ({ user, setUser }) => {
