@@ -96,7 +96,7 @@ const Team = ({ user, setUser }) => {
           </Flex>
         </Card>
       </SimpleGrid>
-      <Box pt={20}>
+      <Box pt={20} pb={!team.owner ? 20 : 0}>
         <Header size="large">Invite Members</Header>
         <Text size="large">
           Your team code is{" "}
@@ -106,30 +106,32 @@ const Team = ({ user, setUser }) => {
         </Text>
       </Box>
 
-      <Box pb={60}>
-        <Header size="large">Team Settings </Header>
-        <Text fontStyle={"italic"} size="small">
-          (only for owner)
-        </Text>
-        <Text mt="10" size="large">
-          Goals
-        </Text>
-        <Flex justify={"center"}>
-          <Button mr="10" variant="invert">
-            Add Goals
+      {team.owner && (
+        <Box pb={60}>
+          <Header size="large">Team Settings </Header>
+          <Text fontStyle={"italic"} size="small">
+            (only for owner)
+          </Text>
+          <Text mt="10" size="large">
+            Goals
+          </Text>
+          <Flex justify={"center"}>
+            <Button mr="10" variant="invert">
+              Add Goals
+            </Button>
+            <Button variant="invert">Edit Goals</Button>
+            <Button ml="10" variant="invert">
+              Delete Goals
+            </Button>
+          </Flex>
+          <Text mt="10" size="large">
+            Danger!
+          </Text>
+          <Button variant="danger" onclick={onOpen}>
+            Delete Team
           </Button>
-          <Button variant="invert">Edit Goals</Button>
-          <Button ml="10" variant="invert">
-            Delete Goals
-          </Button>
-        </Flex>
-        <Text mt="10" size="large">
-          Danger!
-        </Text>
-        <Button variant="danger" onclick={onOpen}>
-          Delete Team
-        </Button>
-      </Box>
+        </Box>
+      )}
 
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>

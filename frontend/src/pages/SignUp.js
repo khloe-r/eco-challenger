@@ -38,7 +38,6 @@ const SignUp = ({ user, setUser }) => {
         console.log(e);
         setError(e.response.data.error);
       });
-    // navigate("/dashboard");
   };
 
   useEffect(() => {

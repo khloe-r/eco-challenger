@@ -16,9 +16,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  //   console.log("req.session", req.session);
   if (req.headers.origin === "http://localhost:3000") {
-    // console.log("ORIGIN X", req.headers);
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, X-Auth-Token");
@@ -77,7 +75,7 @@ const strategy = new LS(
 passport.serializeUser((user, done) => {
   console.log("*** serializeUser called, user: ");
   console.log(user);
-  done(null, { _id: user._id });
+  done(null, { _id: user._id, username: user.username });
 });
 
 passport.deserializeUser(async (id, done) => {

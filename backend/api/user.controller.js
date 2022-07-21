@@ -38,10 +38,19 @@ export default class UserCtrl {
       const owns = [];
 
       req.session.username = username;
-      console.log(req.session.username);
 
       const UserReponse = await UserDAO.addUser(teams, username, password, pfp, total_points, goals, owns);
-      res.json(UserReponse);
+      var userInfo = {
+        _id: UserReponse.insertedId.toString(),
+        username: req.body.username,
+      };
+      req.login(userInfo, function (err) {
+        if (err) {
+          return next(err);
+        } else {
+          res.json(UserReponse);
+        }
+      });
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });

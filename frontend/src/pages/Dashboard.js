@@ -35,8 +35,8 @@ const Dashboard = ({ user, setUser }) => {
       })
       .catch((e) => {
         console.log(e);
-        // setUser({ loggedIn: false, username: "", id: "" });
-        // navigate("/log-in");
+        setUser({ loggedIn: false, username: "", id: "" });
+        navigate("/log-in");
       });
   }, [user, userInfo]);
 
