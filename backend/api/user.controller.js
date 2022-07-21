@@ -8,16 +8,40 @@ export default class UserCtrl {
     try {
       const teams = [];
       const username = req.body.username;
+
+      let json, user;
+      const response = await UserDAO.getUserByUsername(username)
+        .then((response) => {
+          json = JSON.stringify(response);
+          user = JSON.parse(json);
+          if (user) {
+            throw "Username is already taken!";
+          }
+        })
+        .catch((e) => {
+          console.log("err");
+          throw "User could not be created!";
+        });
+
+      const regex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,16}$/g;
+      const pword = req.body.password;
+      if (pword.length < 8) {
+        throw "Password is not long enough!";
+      } else if (!regex.test(pword)) {
+        throw "Password does not meet requirements!";
+      }
       const password = bcrypt.hashSync(req.body.password);
+
       const pfp = "";
       const total_points = 0;
       const goals = [];
       const owns = [];
 
       req.session.username = username;
+      console.log(req.session.username);
 
       const UserReponse = await UserDAO.addUser(teams, username, password, pfp, total_points, goals, owns);
-      res.json({ status: "success" });
+      res.json(UserReponse);
     } catch (e) {
       console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });

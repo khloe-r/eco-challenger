@@ -20,7 +20,7 @@ const Intro = ({ info, setPfp, pfp }) => {
         console.log(e);
       });
     console.log(info["_id"]);
-    console.log(info["profile_photo"]);
+    console.log(emojis[pfp]);
   };
 
   return (
@@ -47,7 +47,7 @@ const Intro = ({ info, setPfp, pfp }) => {
           ))}
         </TabPanels>
       </Tabs>
-      <Button variant="inverted" onclick={handleSubmit}>
+      <Button variant="invert" onclick={handleSubmit}>
         Submit
       </Button>
     </>

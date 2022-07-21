@@ -8,7 +8,7 @@ const LogIn = ({ setUser, user }) => {
   let navigate = useNavigate();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const onChangeName = (e) => {
     const name = e.target.value;
@@ -28,11 +28,13 @@ const LogIn = ({ setUser, user }) => {
           console.log(response);
           setUser({ loggedIn: true, username: response.data.username, id: response.data._id });
           navigate("/dashboard");
+        } else {
+          setError("Invalid Username or Password.");
         }
       })
       .catch((e) => {
         console.log(e);
-        setError(true);
+        setError("Invalid Username or Password.");
       });
   };
 
@@ -46,11 +48,11 @@ const LogIn = ({ setUser, user }) => {
     <>
       <Header>Log In</Header>
       <Stack direction="column" spacing={4} align="center" justifyContent={"center"}>
-        {error && (
+        {error !== "" && (
           <Alert status="error" w="xs">
             <AlertIcon />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>Invalid Username or Password.</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Input label="username" onChange={onChangeName} />

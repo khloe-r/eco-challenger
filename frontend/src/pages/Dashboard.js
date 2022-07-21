@@ -13,6 +13,7 @@ const Dashboard = ({ user, setUser }) => {
   const [pfp, setPfp] = useState(0);
 
   const getUser = useCallback(async () => {
+    console.log("user", user);
     await EcoChallengeDataService.getUser()
       .then(async (response) => {
         if (response.status === 200) {
@@ -34,8 +35,8 @@ const Dashboard = ({ user, setUser }) => {
       })
       .catch((e) => {
         console.log(e);
-        setUser({ loggedIn: false, username: "", id: "" });
-        navigate("/log-in");
+        // setUser({ loggedIn: false, username: "", id: "" });
+        // navigate("/log-in");
       });
   }, [user, userInfo]);
 
@@ -53,6 +54,7 @@ const Dashboard = ({ user, setUser }) => {
 
   return (
     <>
+      {console.log(user, userInfo)}
       <Header>{user.username}'s Dashboard!</Header>
       <SimpleGrid columns={2} spacing={10} px={20}>
         <Card>

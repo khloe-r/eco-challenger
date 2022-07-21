@@ -16,9 +16,9 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log("req.session", req.session);
+  //   console.log("req.session", req.session);
   if (req.headers.origin === "http://localhost:3000") {
-    console.log("ORIGIN X", req.headers);
+    // console.log("ORIGIN X", req.headers);
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, X-Auth-Token");
@@ -59,7 +59,7 @@ const strategy = new LS(
         return done(e);
       });
 
-    if (user["_id"] === undefined) {
+    if (user == null) {
       console.log("wrong user");
       return done(null, false, { message: "Incorrect username" });
     }
@@ -120,7 +120,7 @@ ecochallenge.route("/login").post(
 );
 
 ecochallenge.route("/get-user").get(async (req, res, next) => {
-  console.log(req.user);
+  console.log("user", req.user);
   if (req.user) {
     await UserCtrl.apiGetUserById(req.user._id, req.user.total_points).then((response) => {
       const info = JSON.stringify(response);
