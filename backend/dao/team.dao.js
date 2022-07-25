@@ -1,4 +1,4 @@
-let teams;
+let teams, users;
 import mongodb from "mongodb";
 const ObjectId = mongodb.ObjectId;
 
@@ -9,6 +9,7 @@ export default class TeamDAO {
     }
     try {
       teams = await conn.db(process.env.ECOCHALLENGE_NS).collection("teams");
+      users = await conn.db(process.env.ECOCHALLENGE_NS).collection("users");
     } catch (e) {
       console.error(`Unable to establish a collection handle in teamDAO: ${e}`);
     }
@@ -30,10 +31,31 @@ export default class TeamDAO {
     }
   }
 
-  static async editTeam(teamID, goals, members) {
+  static async editTeam(teamID, goals) {
     try {
-      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { goals: goals, members: members } });
+      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { goals: goals } });
       return updateResponse;
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  static async createGoals(teamID, goals) {
+    try {
+      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { week_goals: goals } });
+      return updateResponse;
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  static async updateScore(userID, teamID, teamCode, score) {
+    try {
+      const updateTotal = await users.updateOne({ _id: ObjectId(userID) }, { $inc: { total_points: score } });
+      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $push: { completed: userID } });
+      const updateScoreResponse = await users.updateOne({ _id: ObjectId(userID) }, { $inc: { "teams.$[elem].score": score } }, { arrayFilters: [{ "elem.team_id": { $eq: teamCode } }] });
+
+      return updateScoreResponse;
     } catch (e) {
       return { error: e };
     }
@@ -102,6 +124,19 @@ export default class TeamDAO {
             },
           },
         },
+        {
+          $lookup: {
+            from: "goals",
+            pipeline: [
+              {
+                $match: {
+                  team_id: "none",
+                },
+              },
+            ],
+            as: "total_goals",
+          },
+        },
       ];
 
       return await teams.aggregate(pipeline).next();
@@ -112,7 +147,8 @@ export default class TeamDAO {
 
   static async deleteTeam(teamID) {
     try {
-      const updateResponse = await teams.deleteOne({ _id: ObjectId(teamID) });
+      console.log("deleting");
+      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { archived: true } });
       return updateResponse;
     } catch (e) {
       return { error: e };

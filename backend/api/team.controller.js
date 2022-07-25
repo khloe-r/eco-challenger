@@ -30,12 +30,39 @@ export default class TeamCtrl {
     try {
       const teamID = req.body.team_id;
       const goals = req.body.goals;
-      const members = req.body.members;
 
-      const EditResponse = await TeamDAO.editTeam(teamID, goals, members);
+      const EditResponse = await TeamDAO.editTeam(teamID, goals);
       res.json({ status: "success" });
     } catch (e) {
       console.log(`error in TeamCtrl: ${e}`);
+      res.status(500).json({ error: e });
+    }
+  }
+
+  static async apiCreateGoals(req, res, next) {
+    try {
+      const teamID = req.body.team_id;
+      const goals = req.body.goals;
+
+      const EditResponse = await TeamDAO.createGoals(teamID, goals);
+      res.json({ status: "success" });
+    } catch (e) {
+      console.log(`error in TeamCtrl: ${e}`);
+      res.status(500).json({ error: e });
+    }
+  }
+
+  static async apiUpdateScore(req, res, next) {
+    try {
+      const userID = req.body.user_id;
+      const teamID = req.body.team_id;
+      const teamCode = req.body.team_code;
+      const score = req.body.score;
+
+      const EditResponse = await TeamDAO.updateScore(userID, teamID, teamCode, score);
+      res.json({ status: "success" });
+    } catch (e) {
+      console.log(`error in UserCtrl: ${e}`);
       res.status(500).json({ error: e });
     }
   }
@@ -57,8 +84,8 @@ export default class TeamCtrl {
     try {
       const teamID = req.body.team_id;
 
-      const getTeam = await TeamDAO.deleteTeam(teamID);
-      res.json({ status: "success" });
+      const deleteTeam = await TeamDAO.deleteTeam(teamID);
+      res.json({ status: "success", data: deleteTeam });
     } catch (e) {
       console.log(`error in TeamCtrl: ${e}`);
       res.status(500).json({ error: e });

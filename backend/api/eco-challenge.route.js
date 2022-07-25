@@ -7,8 +7,10 @@ import GoalCtrl from "./goals.controller.js";
 const router = express.Router();
 
 router.route("/teams").post(TeamCtrl.apiAddTeam).put(TeamCtrl.apiEditTeam).delete(TeamCtrl.apiDeleteTeam);
+router.route("/teams/our-goals").put(TeamCtrl.apiCreateGoals);
 router.route("/team/:team_code/:user").get(TeamCtrl.apiGetTeamById);
 router.route("/users/:score").get(UserCtrl.apiGetRank);
+router.route("/users/update-score").put(TeamCtrl.apiUpdateScore);
 router.route("/users").put(UserCtrl.apiEditUser).delete(UserCtrl.apiDeleteUser);
 router.route("/join-team").patch(MemberCtrl.apiAddMember);
 router.route("/leave-team").patch(MemberCtrl.apiRemoveMember);

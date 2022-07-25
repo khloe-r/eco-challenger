@@ -19,8 +19,6 @@ const Intro = ({ info, setPfp, pfp }) => {
       .catch((e) => {
         console.log(e);
       });
-    console.log(info["_id"]);
-    console.log(emojis[pfp]);
   };
 
   return (

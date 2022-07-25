@@ -6,7 +6,6 @@ import EcoChallengeDataService from "../services/EcoChallengeService";
 const Navbar = ({ user, setUser }) => {
   let navigate = useNavigate();
   let location = useLocation();
-  console.log(location);
 
   const handleLogout = async () => {
     console.log("logging out");

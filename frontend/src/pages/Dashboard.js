@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import EcoChallengeDataService from "../services/EcoChallengeService";
 import Intro from "./Intro";
-import { SimpleGrid, Image, Flex, Box, Badge } from "@chakra-ui/react";
+import { SimpleGrid, Image, Flex, Box, Badge, Checkbox } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const Dashboard = ({ user, setUser }) => {
@@ -13,7 +13,6 @@ const Dashboard = ({ user, setUser }) => {
   const [pfp, setPfp] = useState(0);
 
   const getUser = useCallback(async () => {
-    console.log("user", user);
     await EcoChallengeDataService.getUser()
       .then(async (response) => {
         if (response.status === 200) {
@@ -22,7 +21,6 @@ const Dashboard = ({ user, setUser }) => {
           const score = response.data.user.total_points;
           await EcoChallengeDataService.getRank(score)
             .then((response) => {
-              console.log(response);
               setRank(response.data.rank);
             })
             .catch((e) => {
@@ -54,7 +52,6 @@ const Dashboard = ({ user, setUser }) => {
 
   return (
     <>
-      {console.log(user, userInfo)}
       <Header>{user.username}'s Dashboard!</Header>
       <SimpleGrid columns={2} spacing={10} px={20}>
         <Card>
@@ -79,11 +76,29 @@ const Dashboard = ({ user, setUser }) => {
         </Card>
         <Card>
           <Text size="large">Today's Goals</Text>
+          <Text fontSize="xsmall">To check off goals, visit your Teams!</Text>
           {userInfo.teams?.length === 0 && (
             <Text size="small" px={"2"}>
               Join or create a team to see your goals!
             </Text>
           )}
+          <Flex justify="center">
+            <Box maxW={"75%"} textAlign="left">
+              {userInfo.team_info?.map((team) => {
+                return (
+                  <>
+                    {team.week_goals?.map((goal) => {
+                      return (
+                        <Checkbox isChecked={true} colorScheme={"brand"} size="lg" color={"brand.100"} fontFamily={"Imprima"} my={"1"} borderColor={"Background.100"} textAlign={"left"}>
+                          {goal} {team.team_name}
+                        </Checkbox>
+                      );
+                    })}
+                  </>
+                );
+              })}
+            </Box>
+          </Flex>
         </Card>
       </SimpleGrid>
       <Box mt={20} pb={10}>
@@ -104,6 +119,11 @@ const Dashboard = ({ user, setUser }) => {
                         <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="brand" variant="solid">
                           Rank #{team?.scores[0]?.rank}
                         </Badge>
+                        {team?.archived && (
+                          <Badge rounded="full" px="2" mx="2" fontSize="0.8em" colorScheme="red" variant="solid">
+                            Archived
+                          </Badge>
+                        )}
                       </Box>
                       <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
                         {team.team_name}
@@ -126,9 +146,18 @@ const Dashboard = ({ user, setUser }) => {
             <Flex p={5} w="full" alignItems="center" justifyContent="center" onClick={() => navigate(`/teams/${team.team_code}`)} cursor="pointer" fontFamily={"Imprima"} color="brand.100">
               <Box bg={"brand.200"} w="lg" rounded="lg" shadow="lg" position="relative">
                 <Flex p="6" justify={"space-between"}>
-                  <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-                    {team.team_name}
-                  </Box>
+                  <Flex direction="column" align={"flex-start"}>
+                    <Box d="flex" alignItems="baseline">
+                      {team?.archived && (
+                        <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red" variant="solid">
+                          Archived
+                        </Badge>
+                      )}
+                    </Box>
+                    <Box fontSize="2xl" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+                      {team.team_name}
+                    </Box>
+                  </Flex>
                   <Flex mt="1" justifyContent="space-between" alignContent="center">
                     <ArrowRightIcon h={7} w={7} alignSelf={"center"} />
                   </Flex>

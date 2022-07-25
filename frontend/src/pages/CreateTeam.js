@@ -15,8 +15,6 @@ const CreateTeam = ({ user }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(name);
-    console.log(user.id);
     await EcoChallengeDataService.addTeam({
       owner: user.id,
       name: name,

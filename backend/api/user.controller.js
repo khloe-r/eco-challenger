@@ -72,7 +72,6 @@ export default class UserCtrl {
 
   static async apiGetUserById(user_id, points) {
     try {
-      console.log(points);
       const getTeam = await UserDAO.getFullUserInfo(user_id, points);
       return getTeam;
     } catch (e) {

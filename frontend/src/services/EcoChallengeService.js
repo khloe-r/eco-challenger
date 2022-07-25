@@ -39,6 +39,22 @@ class EcoChallengeDataService {
   addTeam(data) {
     return http.post("/teams", data);
   }
+
+  deleteTeam(data) {
+    return http.delete("/teams", data);
+  }
+
+  editTeamGoals(data) {
+    return http.put("/teams", data);
+  }
+
+  thisWeek(data) {
+    return http.put("/teams/our-goals", data);
+  }
+
+  thisWeekScores(data) {
+    return http.put("/users/update-score", data);
+  }
 }
 
 export default new EcoChallengeDataService();
