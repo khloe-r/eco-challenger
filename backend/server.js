@@ -35,7 +35,7 @@ app.use(
 app.use(
   session({
     secret: process.env.ECOCHALLENGE_SESSION_HASH,
-    store: MongoStore.create({ mongoUrl: process.env.ECOCHALLENGE_DB_URI, dbName: "eco_challenger" }),
+    store: MongoStore.create({ mongoUrl: process.env.ECOCHALLENGE_DB_URI, dbName: process.env.ECOCHALLENGE_NS }),
     resave: false,
     saveUninitialized: false,
   })
