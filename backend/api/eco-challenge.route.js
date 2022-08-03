@@ -10,6 +10,7 @@ router.route("/teams").post(TeamCtrl.apiAddTeam).put(TeamCtrl.apiEditTeam).delet
 router.route("/teams/our-goals").put(TeamCtrl.apiCreateGoals);
 router.route("/team/:team_code/:user").get(TeamCtrl.apiGetTeamById);
 router.route("/users/:score").get(UserCtrl.apiGetRank);
+router.route("/user/:user_id").get(UserCtrl.apiGetUser);
 router.route("/users/update-score").put(TeamCtrl.apiUpdateScore);
 router.route("/users").put(UserCtrl.apiEditUser).delete(UserCtrl.apiDeleteUser);
 router.route("/join-team").patch(MemberCtrl.apiAddMember);

@@ -70,6 +70,17 @@ export default class UserCtrl {
     }
   }
 
+  static async apiGetUser(req, res, next) {
+    try {
+      const user_id = req.params.user_id || {};
+      const getTeam = await UserDAO.getFullUserInfo(user_id, 0);
+      res.json(getTeam);
+    } catch (e) {
+      console.log(`error in UserCtrl: ${e}`);
+      res.status(500).json({ error: e });
+    }
+  }
+
   static async apiGetUserById(user_id, points) {
     try {
       const getTeam = await UserDAO.getFullUserInfo(user_id, points);

@@ -62,7 +62,7 @@ const Dashboard = ({ user, setUser }) => {
           </Flex>
           <Text size="large">{user.username}</Text>
           <Text size={"small"}>Joined since {userInfo.timestamp?.slice(0, 10)}</Text>
-          <SimpleGrid columns={2} spacing={10}>
+          <SimpleGrid columns={2} spacing={10} mt={10}>
             <Box>
               <Text size="small">Ranked</Text>
               <Text size="large">#{rank}</Text>
@@ -89,8 +89,12 @@ const Dashboard = ({ user, setUser }) => {
                   <>
                     {team.week_goals?.map((goal) => {
                       return (
-                        <Checkbox isChecked={true} colorScheme={"brand"} size="lg" color={"brand.100"} fontFamily={"Imprima"} my={"1"} borderColor={"Background.100"} textAlign={"left"}>
-                          {goal} {team.team_name}
+                        <Checkbox isChecked={true} colorScheme={"brand"} size="lg" color={"brand.100"} fontFamily={"Imprima"} my={"1"} borderColor={"Background.100"} textAlign={"left"} width={"100%"}>
+                          {goal}
+                          <br />
+                          <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="brand" variant="solid">
+                            {team.team_name}
+                          </Badge>
                         </Checkbox>
                       );
                     })}

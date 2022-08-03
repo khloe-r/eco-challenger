@@ -56,7 +56,7 @@ const LogIn = ({ setUser, user }) => {
           </Alert>
         )}
         <Input label="username" onChange={onChangeName} />
-        <Input label="password" onChange={onChangePassword} />
+        <Input label="password" onChange={onChangePassword} type={"password"} />
         <Button variant="invert" onclick={handleSubmit}>
           Submit
         </Button>

@@ -127,7 +127,7 @@ const Team = ({ user, setUser }) => {
             {team.members?.length === 0 && <Text size="small">No members have joined!</Text>}
             {team.members?.map((member, index) => {
               return (
-                <Box bg={"brand.200"} w="80%" rounded="lg" shadow="sm" py={2} my={3} position="relative">
+                <Box bg={"brand.200"} w="80%" rounded="lg" shadow="sm" py={2} my={3} position="relative" cursor={"pointer"} onClick={() => navigate(`/user-profile/${member._id}`)}>
                   <Flex justify={"space-between"} align={"center"} mx={5}>
                     <Avatar bg="brand.200" mr={10} src={member.profile_photo} />
                     <Flex align={"flex-end"} direction={"column"}>
@@ -170,7 +170,7 @@ const Team = ({ user, setUser }) => {
                     Save Progress
                   </Button>
                 )}
-                {team.completed.includes(user.id) && (
+                {team.completed?.includes(user.id) && (
                   <Button mt="5" isDisabled={true}>
                     Tasks Submitted this Week!
                   </Button>
@@ -180,7 +180,7 @@ const Team = ({ user, setUser }) => {
           </Flex>
         </Card>
       </SimpleGrid>
-      <Box pt={20} pb={!team.owner ? 20 : 0}>
+      <Box pt={20} pb={30}>
         <Header>Invite Members</Header>
         <Text size="large">
           Your team code is{" "}
@@ -190,7 +190,7 @@ const Team = ({ user, setUser }) => {
         </Text>
       </Box>
 
-      {team.owner && (
+      {team.owner && !team?.archived && (
         <Box pb={60}>
           <Header>Team Settings </Header>
           <Text fontStyle={"italic"} size="small">
@@ -209,7 +209,7 @@ const Team = ({ user, setUser }) => {
               Edit Goals
             </Button>
             <Button variant="invert" onClick={handleCreateGoals}>
-              Generate Goals
+              Generate and Reset Goals
             </Button>
           </Flex>
           <Text mt="10" size="large">

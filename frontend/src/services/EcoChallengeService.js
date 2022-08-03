@@ -27,6 +27,10 @@ class EcoChallengeDataService {
     return http.put("/users", data);
   }
 
+  getPublicUser(user_id) {
+    return http.get(`/user/${user_id}`);
+  }
+
   // Teams
   getTeam(id, user_id) {
     return http.get(`/team/${id}/${user_id}`);

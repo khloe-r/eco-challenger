@@ -42,7 +42,7 @@ export default class TeamDAO {
 
   static async createGoals(teamID, goals) {
     try {
-      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { week_goals: goals } });
+      const updateResponse = await teams.updateOne({ _id: ObjectId(teamID) }, { $set: { week_goals: goals, completed: [] } });
       return updateResponse;
     } catch (e) {
       return { error: e };
