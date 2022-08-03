@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import ecochallenge from "./api/eco-challenge.route.js";
 import session from "express-session";
 import LocalStrategy from "passport-local";
+import MongoStore from "connect-mongo";
 import bcrypt from "bcryptjs";
 import passport from "passport";
 import UserDAO from "./dao/user.dao.js";
@@ -34,6 +35,7 @@ app.use(
 app.use(
   session({
     secret: process.env.ECOCHALLENGE_SESSION_HASH,
+    store: MongoStore.create({ mongoUrl: process.env.ECOCHALLENGE_DB_URI, dbName: "eco_challenger" }),
     resave: false,
     saveUninitialized: false,
   })
