@@ -60,38 +60,29 @@ const strategy = new LS(
       });
 
     if (user == null) {
-      console.log("wrong user");
       return done(null, false, { message: "Incorrect username" });
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-      console.log("wrong pword");
       return done(null, false, { message: "Incorrect password" });
     }
 
-    console.log("loggedin!!\n");
     return done(null, user);
   }
 );
 
 passport.serializeUser((user, done) => {
-  console.log("*** serializeUser called, user: ");
-  console.log(user);
   done(null, { _id: user._id, username: user.username });
 });
 
 passport.deserializeUser(async (id, done) => {
   let j, user_json;
-  console.log(id["_id"]);
   const response = await UserDAO.getUserById(id["_id"])
     .then((response) => {
       j = JSON.stringify(response);
       user_json = JSON.parse(j);
-      console.log("*** Deserialize user, user:");
-      console.log("--------------");
     })
     .catch((e) => {
-      console.log("err");
       return done(e);
     });
   return done(null, user_json);
@@ -104,8 +95,6 @@ app.use(passport.session());
 
 ecochallenge.route("/login").post(
   function (req, res, next) {
-    console.log("routes/user.js, login, req.body: ");
-    console.log(req.body);
     next();
   },
   passport.authenticate("local"),
@@ -114,18 +103,15 @@ ecochallenge.route("/login").post(
       username: req.user.name,
       id: req.user._id,
     };
-    console.log("logged in", req.user);
     res.send(userInfo);
   }
 );
 
 ecochallenge.route("/get-user").get(async (req, res, next) => {
-  console.log("user", req.user);
   if (req.user) {
     await UserCtrl.apiGetUserById(req.user._id, req.user.total_points).then((response) => {
       const info = JSON.stringify(response);
       const json = JSON.parse(info);
-      console.log(json);
       res.json({ user: json });
     });
   } else {

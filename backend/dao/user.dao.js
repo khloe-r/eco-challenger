@@ -173,17 +173,4 @@ export default class TeamDAO {
       console.log(`error in UserCtrl: ${e}`);
     }
   }
-
-  static async deleteUser(userID) {
-    try {
-      const deleteResponse = await users.deleteOne({ _id: { $eq: ObjectId(userID) } });
-      return deleteResponse;
-    } catch (e) {
-      return { error: e };
-    }
-  }
-
-  static async checkPassword(inputPassword, originalPassword) {
-    return bcrypt.compareSync(inputPassword, originalPassword);
-  }
 }

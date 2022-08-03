@@ -24,14 +24,4 @@ export default class MemberDAO {
       return { error: e };
     }
   }
-
-  static async removeMember(teamID, userID) {
-    try {
-      await teams.updateOne({ _id: ObjectId(teamID) }, { $pull: { members: { user_id: userID, score: { $gte: 0 } } } });
-      return await users.updateOne({ _id: ObjectId(userID) }, { $pull: { teams: { team_id: teamID, score: { $gte: 0 } } } });
-    } catch (e) {
-      console.error(`Unable to remove user: ${e}`);
-      return { error: e };
-    }
-  }
 }

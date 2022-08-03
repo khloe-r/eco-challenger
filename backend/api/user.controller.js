@@ -91,19 +91,6 @@ export default class UserCtrl {
     }
   }
 
-  static async apiDeleteUser(req, res, next) {
-    try {
-      const userID = req.body.user_id;
-
-      const getTeam = await UserDAO.deleteUser(userID);
-
-      res.json({ status: "success" });
-    } catch (e) {
-      console.log(`error in UserCtrl: ${e}`);
-      res.status(500).json({ error: e });
-    }
-  }
-
   static async apiGetRank(req, res, next) {
     try {
       const points = parseInt(req.params.score);
