@@ -20,9 +20,6 @@ const CreateTeam = ({ user }) => {
       name: name,
     })
       .then((response) => {
-        if (response.status === 200) {
-          console.log("complete");
-        }
         navigate("/dashboard");
       })
       .catch((e) => {

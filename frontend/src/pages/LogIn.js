@@ -23,9 +23,7 @@ const LogIn = ({ setUser, user }) => {
     var data = { username: name, password: password };
     EcoChallengeDataService.handleLogin(data)
       .then((response) => {
-        console.log(response.data);
         if (response.status === 200) {
-          console.log(response);
           setUser({ loggedIn: true, username: response.data.username, id: response.data._id });
           navigate("/dashboard");
         } else {

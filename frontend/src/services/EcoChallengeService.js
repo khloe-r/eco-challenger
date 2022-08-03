@@ -48,6 +48,7 @@ class EcoChallengeDataService {
     return http.delete("/teams", data);
   }
 
+  // Goals and Scores
   editTeamGoals(data) {
     return http.put("/teams", data);
   }

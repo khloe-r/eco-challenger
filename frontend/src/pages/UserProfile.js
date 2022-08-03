@@ -17,11 +17,8 @@ const UserProfile = ({ user, setUser }) => {
       }
     });
 
-    console.log(user_id);
     await EcoChallengeDataService.getPublicUser(user_id)
       .then(async (response) => {
-        console.log(response);
-
         if (response.status === 200) {
           setUserInfo(response.data);
           const score = response.data.total_points;
@@ -40,7 +37,6 @@ const UserProfile = ({ user, setUser }) => {
         console.log(e);
         navigate("/dashboard");
       });
-    console.log("after");
   }, [user, userInfo]);
 
   useEffect(() => {
@@ -57,7 +53,7 @@ const UserProfile = ({ user, setUser }) => {
       <Card mx={20}>
         <Flex justify={"center"}>
           <Flex borderWidth={"thick"} borderColor="brand.100" borderRadius="full" width={100} justify="center">
-            <Image borderRadius="full" boxSize="150px" h={50} m={5} src={userInfo.profile_photo} alt={`Your profile picture`} />
+            <Image borderRadius="full" boxSize="150px" h={50} m={5} src={userInfo.profile_photo} alt={`User's profile picture`} />
           </Flex>
         </Flex>
         <Text size="large">{userInfo.name}</Text>

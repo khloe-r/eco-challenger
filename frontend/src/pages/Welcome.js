@@ -2,7 +2,7 @@ import { Stack } from "@chakra-ui/react";
 import { Header, Button } from "../components";
 import { useNavigate } from "react-router-dom";
 
-const Welcome = ({ user }) => {
+const Welcome = () => {
   let navigate = useNavigate();
 
   return (

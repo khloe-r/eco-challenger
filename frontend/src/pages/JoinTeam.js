@@ -20,9 +20,6 @@ const JoinTeam = ({ user }) => {
       user_id: user.id,
     })
       .then((response) => {
-        if (response.status === 200) {
-          console.log("complete");
-        }
         navigate("/dashboard");
       })
       .catch((e) => {

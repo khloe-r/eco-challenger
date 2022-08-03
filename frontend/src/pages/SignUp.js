@@ -24,14 +24,11 @@ const SignUp = ({ user, setUser }) => {
     var data = { username: name, password: password };
     await EcoChallengeDataService.handleSignUp(data)
       .then(async (response) => {
-        console.log(response.data);
         if (response.data) {
-          console.log("good");
           await setUser({ loggedIn: true, username: response.data.username, id: response.data.insertedId });
-          console.log(user);
           navigate("/dashboard");
         } else {
-          console.log("bad");
+          console.log("err");
         }
       })
       .catch((e) => {

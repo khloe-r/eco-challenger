@@ -12,7 +12,6 @@ const Navbar = ({ user, setUser }) => {
     await EcoChallengeDataService.handleLogout()
       .then((response) => {
         setUser({ loggedIn: false, username: "", id: "" });
-        console.log(user);
         navigate("/log-in");
       })
       .catch((e) => {

@@ -35,15 +35,12 @@ const Team = ({ user, setUser }) => {
         setUser({ loggedIn: false, username: "", id: "" });
         navigate("/log-in");
       });
-    console.log(team);
   }, [user]);
 
   const handleDelete = async () => {
     const data = { data: { team_id: team._id } };
-    console.log(data);
     await EcoChallengeDataService.deleteTeam(data)
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           navigate("/dashboard");
         }
